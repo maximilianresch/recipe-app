@@ -54,6 +54,7 @@ export default function TestForm() {
       <form className={style.form}>
         <h1>Recipe</h1>
         <input
+        className={style.title}
           value={title}
           placeholder="title"
           onChange={(e) => {
@@ -61,6 +62,7 @@ export default function TestForm() {
           }}
         ></input>
         <textarea
+        className={style.guide}
           value={guide}
           placeholder="guide"
           onChange={(e) => {
@@ -68,6 +70,7 @@ export default function TestForm() {
           }}
         ></textarea>
         <input
+        className={style.ingredients}
           value={currentIngredient}
           placeholder="ingredients"
           onChange={(e) => {
