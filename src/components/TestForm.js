@@ -1,13 +1,36 @@
 import React, { useState, useEffect } from "react";
 import style from "./style.module.css";
 
+import * as yup from "yup";
+
 /*
+  const recipe = [
+          {
+            title: "Gulasch",
+            guide: "geh vorher scheißn (nicht hände waschen!!!)",
+            ingridients: [
+              {
+                name: "Knoblauch",
+                amount: "234"
+              }
+            ]
+          }
+        ]
 
-const recipe = [
-    
-]
+      */
 
-*/
+let schema = yup.object().shape({
+  title: yup.string().required(),
+  guide: yup.string().required(),
+  ingredients: yup
+    .array(
+      yup.object().shape({
+        name: yup.string().required(),
+        amount: yup.string().required(),
+      })
+    )
+    .min(1),
+});
 
 const recipiesKey = "recipies";
 
@@ -17,6 +40,7 @@ export default function TestForm() {
   const [ingredients, setIngredients] = useState([]);
   const [guide, setGuide] = useState("");
   const [amount, setAmount] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [recipies, setRecipies] = useState(
     localStorage.getItem(recipiesKey)
@@ -28,13 +52,30 @@ export default function TestForm() {
     localStorage.setItem(recipiesKey, JSON.stringify(recipies));
   }, [recipies]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    const newRecipie = { title, ingredients, guide };
+
+    const valid = await schema.validate(newRecipie).catch((e) => {
+      const errorMessage = e.errors[0]
+      setErrorMessage(errorMessage);
+
+      console.log('error', errorMessage)
+    });
+
+    if (!valid) {
+      return;
+
+    }
+
+    console.log("valid", valid);
+
     const newList = [...recipies];
-    newList.push({ title, ingredients, guide });
+    newList.push(newRecipie);
     setRecipies(newList);
     setTitle("");
     setIngredients([]);
     setGuide("");
+    setErrorMessage("");
   };
 
   const onDelete = (index) => {
@@ -44,8 +85,9 @@ export default function TestForm() {
   };
 
   const onAdd = () => {
+    const newIngredient = { name: currentIngredient, amount }
     const newList = [...ingredients];
-    newList.push({ name: currentIngredient, amount });
+    newList.push(newIngredient);
     setIngredients(newList);
 
     setCurrentIngredient("");
@@ -87,11 +129,11 @@ export default function TestForm() {
             setAmount(e.target.value);
           }}
         ></input>
-        {ingredients.map((ingredient) => {
+        {ingredients.map((ingredient, i) => {
           return (
-            <p>
+            <p key={i}>
               {" "}
-               {ingredient.amount} {ingredient.name}
+              {ingredient.amount} {ingredient.name}
             </p>
           );
         })}
@@ -102,35 +144,23 @@ export default function TestForm() {
           Submit
         </button>
       </form>
+      <div style={{color: 'red'}}>
+        {errorMessage}
+      </div>
 
-      {/*
-  const recipe = [
-          {
-            title: "Gulasch",
-            guide: "geh vorher scheißn (nicht hände waschen!!!)",
-            ingridients: [
-              {
-                name: "Knoblauch",
-                amount: "234"
-              }
-            ]
-          }
-        ]
-
-      */}
       <div className={style.list}>
         <ul>
           {recipies.map((recipe, i) => {
             return (
-              <div key={recipe.title} style={{ marginTop: "1rem" }}>
+              <div key={i} style={{ marginTop: "1rem" }}>
                 <li>
                   Title: {recipe.title}
-                  {recipe.ingredients.map((ingredient) => {
+                  {recipe.ingredients.map((ingredient, i) => {
                     return (
-                      <>
+                      <div key={i}>
                         <p>amount: {ingredient.amount}</p>
                         <p>ingredients: {ingredient.name}</p>
-                      </>
+                      </div>
                     );
                   })}
                   <p>guide: {recipe.guide}</p>
