@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import style from "./style.module.css";
 
+import TextField from "@material-ui/core/TextField";
 import * as yup from "yup";
 
 /*
@@ -34,7 +35,7 @@ let schema = yup.object().shape({
 
 const recipiesKey = "recipies";
 
-export default function TestForm() {
+export default function RecipeForm() {
   const [title, setTitle] = useState("");
   const [currentIngredient, setCurrentIngredient] = useState("");
   const [ingredients, setIngredients] = useState([]);
@@ -56,15 +57,14 @@ export default function TestForm() {
     const newRecipie = { title, ingredients, guide };
 
     const valid = await schema.validate(newRecipie).catch((e) => {
-      const errorMessage = e.errors[0]
+      const errorMessage = e.errors[0];
       setErrorMessage(errorMessage);
 
-      console.log('error', errorMessage)
+      console.log("error", errorMessage);
     });
 
     if (!valid) {
       return;
-
     }
 
     console.log("valid", valid);
@@ -85,7 +85,7 @@ export default function TestForm() {
   };
 
   const onAdd = () => {
-    const newIngredient = { name: currentIngredient, amount }
+    const newIngredient = { name: currentIngredient, amount };
     const newList = [...ingredients];
     newList.push(newIngredient);
     setIngredients(newList);
@@ -98,37 +98,40 @@ export default function TestForm() {
     <div>
       <form className={style.form}>
         <h1>Recipe</h1>
-        <input
-          className={style.title}
+        <TextField
+          variant="outlined"
           value={title}
-          placeholder="title"
           onChange={(e) => {
             setTitle(e.target.value);
           }}
-        ></input>
-        <textarea
-          className={style.guide}
+          label="title"
+        ></TextField>
+        <TextField
+          multiline
+          rows={10}
+          variant="outlined"
           value={guide}
-          placeholder="guide"
+          label="guide"
           onChange={(e) => {
             setGuide(e.target.value);
           }}
-        ></textarea>
-        <input
-          className={style.ingredients}
+        ></TextField>
+        <TextField
+          variant="outlined"
           value={currentIngredient}
-          placeholder="ingredients"
+          label="ingredients"
           onChange={(e) => {
             setCurrentIngredient(e.target.value);
           }}
-        ></input>
-        <input
+        ></TextField>
+        <TextField
+          variant="outlined"
           value={amount}
-          placeholder="amount"
+          label="amount"
           onChange={(e) => {
             setAmount(e.target.value);
           }}
-        ></input>
+        ></TextField>
         {ingredients.map((ingredient, i) => {
           return (
             <p key={i}>
@@ -144,9 +147,7 @@ export default function TestForm() {
           Submit
         </button>
       </form>
-      <div style={{color: 'red'}}>
-        {errorMessage}
-      </div>
+      <div style={{ color: "red" }}>{errorMessage}</div>
 
       <div className={style.list}>
         <ul>
