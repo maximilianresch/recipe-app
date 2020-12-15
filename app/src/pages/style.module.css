@@ -1,0 +1,22 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.list ul {
+    list-style-type: none;
+    padding: 50px;
+}
+
+/* Home */
+
+.arrow {
+    height: 30%;
+    width: 30%;
+    padding: 0 0 0 50px;
+}
+
