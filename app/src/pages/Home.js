@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@material-ui/core";
 import style from './style.module.css'
+import axios from 'axios'
 
 import oldRecipe from "../assets/oldRecipe.jpeg";
 import homeImage from "../assets/homeImage.svg";
 import curveArrow from '../assets/curveArrow.svg';
 
+
 export default function Home() {
+
   return (
     <Box
       display="flex"

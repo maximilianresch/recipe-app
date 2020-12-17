@@ -3,22 +3,22 @@ import style from "./style.module.css";
 
 import TextField from "@material-ui/core/TextField";
 import * as yup from "yup";
+import axios from 'axios';
 
 import { Select, MenuItem, Box } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     minWidth: 120,
-    marginLeft: 10
+    marginLeft: 10,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
 }));
-
 
 /*
   const recipe = [
@@ -45,7 +45,6 @@ let schema = yup.object().shape({
     .array(
       yup.object().shape({
         name: yup.string().required(),
-        amount: yup.string().required(),
       })
     )
     .min(1),
@@ -97,6 +96,12 @@ export default function RecipeForm() {
     setIngredients([]);
     setGuide("");
     setErrorMessage("");
+
+    
+
+    const response = await axios.post("http://localhost:4000/recipe", newRecipie)
+
+    console.log("response", response)
   };
 
   const onDelete = (index) => {
@@ -105,7 +110,7 @@ export default function RecipeForm() {
     setRecipies(newList);
   };
 
-  const onAdd = () => {
+  const onAdd = async () => {
     const newIngredient = { name: currentIngredient, amount, measure };
     const newList = [...ingredients];
     newList.push(newIngredient);
@@ -113,6 +118,7 @@ export default function RecipeForm() {
 
     setCurrentIngredient("");
     setAmount("");
+
   };
 
   return (
@@ -154,23 +160,25 @@ export default function RecipeForm() {
               setAmount(e.target.value);
             }}
           ></TextField>
-<FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">measure</InputLabel>
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            label="measure"
-            onChange={(e) => {
-              setMeasure(e.target.value);
-              
-            }}
-          >
-            <MenuItem value={"g"}>g</MenuItem>
-            <MenuItem value={"kg"}>kg</MenuItem>
-            <MenuItem value={"ml"}>ml</MenuItem>
-          </Select>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">
+              measure
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              label="measure"
+              onChange={(e) => {
+                setMeasure(e.target.value);
+              }}
+              value={measure}
+            >
+              <MenuItem value={""}>none</MenuItem>
+              <MenuItem value={"g"}>g</MenuItem>
+              <MenuItem value={"kg"}>kg</MenuItem>
+              <MenuItem value={"ml"}>ml</MenuItem>
+            </Select>
           </FormControl>
-
         </Box>
         {ingredients.map((ingredient, i) => {
           return (
@@ -188,7 +196,16 @@ export default function RecipeForm() {
           Submit
         </button>
       </form>
-      <div style={{ color: "red" }}>{errorMessage}</div>
+      <div
+        style={{
+          color: "red",
+          display: "flex",
+          justifyContent: "center",
+          padding: "20px",
+        }}
+      >
+        {errorMessage}
+      </div>
 
       <div className={style.list}>
         <ul>
@@ -196,21 +213,27 @@ export default function RecipeForm() {
             return (
               <div key={i} style={{ marginTop: "1rem" }}>
                 <li>
-                  Title: {recipe.title}
+                  <h4> Title:</h4> {recipe.title}
+                  <h4>ingredients:</h4>
                   {recipe.ingredients.map((ingredient, i) => {
                     return (
                       <div key={i}>
-                        <p>portions: </p>
                         <p>
-                          amount: {ingredient.amount} {ingredient.measure}
+                          {ingredient.amount} {ingredient.measure}{" "}
+                          {ingredient.name}
                         </p>
-                        <p>ingredients: {ingredient.name}</p>
                       </div>
                     );
                   })}
-                  <p>guide: {recipe.guide}</p>
+                  <h4>guide:</h4>
+                  {recipe.guide}
                 </li>
-                <button type="button" onClick={onDelete}>
+                <br />
+                <button
+                  type="button"
+                  onClick={onDelete}
+                  style={{ margin: "20px" }}
+                >
                   Löschen
                 </button>
               </div>

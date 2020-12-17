@@ -9,6 +9,9 @@ import * as yup from "yup";
 import { useState } from "react";
 import { useHistory} from 'react-router-dom';
 import { Box } from "@material-ui/core";
+import { useRecoilState } from 'recoil'
+import { userState } from '../globalState';
+
 
 let schema = yup.object().shape({
   firstname: yup.string().required(),
@@ -23,6 +26,8 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [user, setUser] = useRecoilState(userState);
 
   const router = useHistory();
 
@@ -55,6 +60,7 @@ export default function Register() {
       password,
     };
 
+   
     const response = await axios.post(
       "http://localhost:4000/register",
       data
@@ -70,11 +76,13 @@ export default function Register() {
     console.log("response", response);
   };
 
+
   return (
     <div>
       <form className={style.form} action="/register" method="POST">
+        {user && <p>hallo, {user.firstname}</p>}
         <h1>Register</h1>
-        <Box display="flex" flexDirection="row">
+        <Box display="flex" flexDirection="row" gridGap="5px">
           <TextField
             variant="outlined"
             label="firstname"

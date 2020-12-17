@@ -4,12 +4,27 @@
     width: 100%;
     align-items: center;
     gap: 20px;
+    padding: 50px 0 50px 0;
 }
 
 
 .list ul {
     list-style-type: none;
     padding: 50px;
+    
+}
+
+.list li {
+    border: solid black;
+    width: 40%;
+    padding: 10px;
+    display: inline-block;
+}
+
+.list {
+    display: flex;
+    text-align: center;
+
 }
 
 /* Home */
