@@ -3,24 +3,25 @@ import RecipeForm from "./pages/RecipeForm";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Profile from './pages/Profile'
 
 import Footer from "../src/components/Footer";
 import recipeApi from "./utils/recipeApi";
 
-import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { deleteUserToken } from './utils/auth';
 import {
-  RecoilRoot,
-  atom,
-  selector,
   useRecoilState,
-  useRecoilValue,
 } from 'recoil';
 import {userState} from './globalState'
+import { useHistory } from "react-router-dom";
+
  
 export default function App(props) {
   const [user, setUser] = useRecoilState(userState);
+
+  const router = useHistory();
 
   useEffect(() => {
     recipeApi.get("/me").then((res) => {
@@ -41,23 +42,28 @@ export default function App(props) {
               <Link to="/recipe">Recipe</Link>
             </li>
             <li>
+            {user ? (
+              <Link to="/profile">Profile</Link>
+            ) : (
               <Link to="/register">Register</Link>
+            )
+            }
             </li>
             <li>
               {user ? (
-                <Link onClick={e => {
+                <Link  onClick={e => {
                   deleteUserToken()
                   setUser(undefined)
-                }}>Logout</Link>
+                }}>Logout </Link>
+                
               ) : (
-                <Link to="/login">Login</Link>
+                <Link to="/login">Login <Redirect to="/" /></Link>
               )}
             </li>
 
           </ul>
         </nav>
-        
-        {user && <p>Hallo, {user.firstname}</p>}
+      
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -71,6 +77,9 @@ export default function App(props) {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/profile">
+            <Profile />
           </Route>
           <Route path="/">
             <Home />

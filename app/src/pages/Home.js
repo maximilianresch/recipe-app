@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box } from "@material-ui/core";
 import style from './style.module.css'
-import axios from 'axios'
 
 import oldRecipe from "../assets/oldRecipe.jpeg";
 import homeImage from "../assets/homeImage.svg";

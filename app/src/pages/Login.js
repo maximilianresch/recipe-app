@@ -8,9 +8,6 @@ import * as auth from "../utils/auth";
 import TextField from "@material-ui/core/TextField";
 import * as yup from "yup";
 
-import { useRecoilState } from 'recoil'
-import { userState } from '../globalState';
-
 let schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required(),
@@ -20,7 +17,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [user, setUser] = useRecoilState(userState);
 
   const router = useHistory();
 
@@ -48,9 +44,6 @@ export default function Login() {
       password,
     };
 
-    
-
-
     const response = await axios.post("http://localhost:4000/login", data);
     if (response.data.success) {
       auth.saveUserToken(response.data.token);
@@ -61,6 +54,11 @@ export default function Login() {
     console.log("response", response);
   };
 
+  const handleKeypress = (e) => {
+    if (e.which === 13) {
+      onSubmit();
+    }
+  };
 
   return (
     <div>
@@ -72,6 +70,7 @@ export default function Login() {
           onChange={(e) => {
             setEmail(e.target.value);
           }}
+          onKeyPress={handleKeypress}
         ></TextField>
         <TextField
           variant="outlined"
@@ -80,6 +79,7 @@ export default function Login() {
           onChange={(e) => {
             setPassword(e.target.value);
           }}
+          onKeyPress={handleKeypress}
         ></TextField>
         <div style={{ color: "red" }}>{errorMessage}</div>
         <button type="button" onClick={onSubmit}>

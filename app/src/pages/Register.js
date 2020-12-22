@@ -76,6 +76,13 @@ export default function Register() {
     console.log("response", response);
   };
 
+  const handleKeypress = (e) => {
+    if (e.which === 13) {
+      onSubmit();
+    }
+  };
+
+
 
   return (
     <div>
@@ -86,6 +93,7 @@ export default function Register() {
           <TextField
             variant="outlined"
             label="firstname"
+            onKeyPress={handleKeypress}
             onChange={(e) => {
               setFirstname(e.target.value);
             }}
@@ -93,6 +101,7 @@ export default function Register() {
           <TextField
             variant="outlined"
             label="lastname"
+            onKeyPress={handleKeypress}
             onChange={(e) => {
               setLastname(e.target.value);
             }}
@@ -103,6 +112,7 @@ export default function Register() {
             variant="outlined"
             label="email"
             type="email"
+            onKeyPress={handleKeypress}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
@@ -112,6 +122,7 @@ export default function Register() {
           variant="outlined"
           label="password"
           type="password"
+          onKeyPress={handleKeypress}
           onChange={(e) => {
             setPassword(e.target.value);
           }}
