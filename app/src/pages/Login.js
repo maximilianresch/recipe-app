@@ -32,11 +32,6 @@ export default function Login() {
       return;
     }
 
-    console.log("login", {
-      email,
-      password,
-    });
-
     setErrorMessage("");
 
     const data = {
@@ -52,6 +47,7 @@ export default function Login() {
       setErrorMessage("E-mail or password is invalid");
     }
     console.log("response", response);
+    window.location.reload(false)
   };
 
   const handleKeypress = (e) => {

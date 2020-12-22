@@ -9,8 +9,6 @@ import * as yup from "yup";
 import { useState } from "react";
 import { useHistory} from 'react-router-dom';
 import { Box } from "@material-ui/core";
-import { useRecoilState } from 'recoil'
-import { userState } from '../globalState';
 
 
 let schema = yup.object().shape({
@@ -26,8 +24,6 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [user, setUser] = useRecoilState(userState);
 
   const router = useHistory();
 
@@ -87,7 +83,6 @@ export default function Register() {
   return (
     <div>
       <form className={style.form} action="/register" method="POST">
-        {user && <p>hallo, {user.firstname}</p>}
         <h1>Register</h1>
         <Box display="flex" flexDirection="row" gridGap="5px">
           <TextField
