@@ -47,12 +47,14 @@ export default function Login() {
       setErrorMessage("E-mail or password is invalid");
     }
     console.log("response", response);
-    window.location.reload(false)
+    window.location.reload(false);
   };
 
   const handleKeypress = (e) => {
     if (e.which === 13) {
       onSubmit();
+
+      
     }
   };
 

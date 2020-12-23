@@ -9,6 +9,7 @@ import { Select, MenuItem, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
+import recipeApi from '../utils/recipeApi';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -63,15 +64,11 @@ export default function RecipeForm() {
 
   const classes = useStyles();
 
-  const [recipies, setRecipies] = useState(
-    localStorage.getItem(recipiesKey)
-      ? JSON.parse(localStorage.getItem(recipiesKey))
-      : []
-  );
+  const [recipies, setRecipies] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem(recipiesKey, JSON.stringify(recipies));
-  }, [recipies]);
+    const response = recipeApi.get("/recipe")
+  }, []);
 
   const onSubmit = async () => {
     const newRecipie = { title, ingredients, guide };
@@ -99,7 +96,7 @@ export default function RecipeForm() {
 
     
 
-    const response = await axios.post("http://localhost:4000/recipe", newRecipie)
+    const response = await recipeApi.post("/recipe", newRecipie)
 
     console.log("response", response)
   };

@@ -10,13 +10,7 @@ import recipeApi from "./utils/recipeApi";
 
 import React, { useEffect } from "react";
 import { userState } from "./globalState";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { deleteUserToken } from "./utils/auth";
 import { useRecoilState } from "recoil";
 
@@ -59,9 +53,7 @@ export default function App(props) {
                   Logout{" "}
                 </Link>
               ) : (
-                <Link to="/login">
-                  Login <Redirect to="/" />
-                </Link>
+                <Link to="/login">Login</Link>
               )}
             </li>
           </ul>
@@ -78,7 +70,7 @@ export default function App(props) {
             <Register />
           </Route>
           <Route path="/profile">
-            <Profile />
+            {user && <Profile user={user} />}
           </Route>
           <Route path="/login">
             <Login />

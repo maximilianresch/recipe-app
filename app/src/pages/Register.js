@@ -70,6 +70,8 @@ export default function Register() {
     }
 
     console.log("response", response);
+    window.location.reload(false);
+
   };
 
   const handleKeypress = (e) => {

@@ -2,7 +2,8 @@ const express = require("express");
 const db = require("./db");
 var cors = require("cors");
 var jwt = require("jsonwebtoken");
-require('express-async-errors');
+require("express-async-errors");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -60,12 +61,15 @@ app.post("/login", async (req, res) => {
 app.post("/recipe", async (req, res) => {
   const body = req.body;
 
+  const user = await getAuthUser(req, res);
+
+  console.log("body", body);
+
   const currentRecipe = await db.Recipe.create({
     title: body.title,
     guide: body.guide,
     ingredients: body.ingredients,
-    name: body.name,
-    amount: body.amount,
+    userId: user._id,
   });
 
   res.json({
@@ -76,13 +80,44 @@ app.post("/recipe", async (req, res) => {
   console.log("user", user);
 });
 
+app.get("/recipe", async (req, res) => {
+  const body = req.body;
+
+  const user = await getAuthUser(req)
+
+  const recipes = await db.Recipe.find({
+    userId: user._id
+  })
+
+
+  res.json({success: true, recipes})  
+})
+
 app.get("/me", async (req, res) => {
   const user = await getAuthUser(req, res);
 
   res.json({ success: true, user });
 });
 
+app.put("/me", async (req, res) => {
+  const user = await getAuthUser(req, res);
+  const body = req.body;
 
+  console.log("body", body);
+
+  console.log("user", user);
+
+  const updateUser = await db.User.updateOne(
+    { _id: user._id },
+    {
+      firstname: body.firstname,
+      lastname: body.lastname,
+      email: body.email,
+    }
+  );
+
+  res.json({ success: true, message: "user changed" });
+});
 
 app.listen(4000, () => {
   console.log("Listening on port 4000");

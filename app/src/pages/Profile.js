@@ -1,52 +1,74 @@
 import recipeApi from "../utils/recipeApi";
 
-import React, { useEffect } from "react";
-import { userState } from "../../src/globalState";
-import { useRecoilState } from "recoil";
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import axios from "axios";
 
 import TextField from "@material-ui/core/TextField";
 import { Box } from "@material-ui/core";
+import { userState } from '../globalState';
 
-export default function Profile() {
-  const [user, setUser] = useRecoilState(userState);
+export default function Profile({ user }) {
+  const setUser = useSetRecoilState(userState)
+  const [firstname, setNewFirstname] = useState(user?.firstname);
+  const [lastname, setNewLastname] = useState(user?.lastname);
+  const [email, setNewEmail] = useState(user?.email);
 
-  useEffect(() => {
-    recipeApi.get("/me").then((res) => {
-      console.log("data", res);
-      setUser(res.data.user);
-    });
-  }, [setUser]);
-
- 
+  const onButton = async () => {
+    const newUser = {
+      firstname,
+      lastname,
+      email,
+    }
+    const response = await recipeApi.put("/profile", newUser);
+    setUser(newUser)
+  };
 
   return (
     <div>
       <div>
-      <h1>Profile</h1>
+        <h1>Profile</h1>
         <div>
           {user && (
             <form action="/profile">
-              <Box display="flex" flexDirection="row" gridGap="5px" justifyContent="center">
+              <Box
+                display="flex"
+                flexDirection="row"
+                gridGap="5px"
+                justifyContent="center"
+              >
                 <TextField
                   id="filled-basic"
                   label="firstname"
                   variant="filled"
-                  defaultValue={user.firstname}
+                  value={firstname}
+                  onChange={(e) => {
+                    setNewFirstname(e.target.value);
+                  }}
                 />
 
                 <TextField
                   id="filled-basic"
                   label="lastname"
                   variant="filled"
-                  defaultValue={user.lastname}
+                  value={lastname}
+                  onChange={(e) => {
+                    setNewLastname(e.target.value);
+                  }}
                 />
                 <TextField
                   id="filled-basic"
-                  label="lastname"
+                  label="email"
                   variant="filled"
-                  defaultValue={user.email}
+                  value={email}
+                  onChange={(e) => {
+                    setNewEmail(e.target.value);
+                  }}
                 />
               </Box>
+              <button type="button" onClick={onButton}>
+                change
+              </button>
             </form>
           )}
         </div>
