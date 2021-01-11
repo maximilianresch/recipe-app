@@ -69,6 +69,7 @@ app.post("/recipe", async (req, res) => {
     title: body.title,
     guide: body.guide,
     ingredients: body.ingredients,
+    measure: body.measure,
     userId: user._id,
   });
 
@@ -80,18 +81,32 @@ app.post("/recipe", async (req, res) => {
   console.log("user", user);
 });
 
+
+app.get("/recipe/:id", async (req, res) => {
+  const recipeId = req.params.id;
+
+  const user = await getAuthUser(req, res);
+
+  const recipie = await db.Recipe.findOne({ _id: recipeId, userId: user.id });
+
+  if (!recipie) throw new Error(403);
+
+
+  res.json({ recipie });
+})
+
+
 app.get("/recipe", async (req, res) => {
   const body = req.body;
 
-  const user = await getAuthUser(req)
+  const user = await getAuthUser(req);
 
   const recipes = await db.Recipe.find({
-    userId: user._id
-  })
+    userId: user._id,
+  });
 
-
-  res.json({success: true, recipes})  
-})
+  res.json({ success: true, recipes });
+});
 
 app.get("/me", async (req, res) => {
   const user = await getAuthUser(req, res);
@@ -118,6 +133,22 @@ app.put("/me", async (req, res) => {
 
   res.json({ success: true, message: "user changed" });
 });
+
+app.put("/recipe/:id", async (req, res) => {
+  const recipeId = req.params.id;
+
+  const user = await getAuthUser(req, res);
+
+  const recipie = await db.Recipe.findOne({ _id: recipeId, userId: user.id });
+
+  if (!recipie) throw new Error(403);
+
+  const updateRecipe = await db.Recipe.updateOne({ _id: recipeId }, req.body);
+
+  res.json({});
+});
+
+
 
 app.listen(4000, () => {
   console.log("Listening on port 4000");

@@ -20,7 +20,7 @@ const Recipe = mongoose.model(
   new mongoose.Schema({
     title: String,
     guide: String,
-    ingredients: [{ name: String, amount: String }],
+    ingredients: [{ name: String, amount: String, measure: String }],
     userId: mongoose.Schema.Types.ObjectId,
   })
 );

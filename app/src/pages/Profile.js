@@ -1,15 +1,14 @@
 import recipeApi from "../utils/recipeApi";
 
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import axios from "axios";
+import React, { useState } from "react";
+import { useSetRecoilState } from "recoil";
 
 import TextField from "@material-ui/core/TextField";
 import { Box } from "@material-ui/core";
-import { userState } from '../globalState';
+import { userState } from "../globalState";
 
 export default function Profile({ user }) {
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetRecoilState(userState);
   const [firstname, setNewFirstname] = useState(user?.firstname);
   const [lastname, setNewLastname] = useState(user?.lastname);
   const [email, setNewEmail] = useState(user?.email);
@@ -19,9 +18,10 @@ export default function Profile({ user }) {
       firstname,
       lastname,
       email,
-    }
+    };
     const response = await recipeApi.put("/profile", newUser);
-    setUser(newUser)
+    setUser(newUser);
+    console.log("response", response);
   };
 
   return (

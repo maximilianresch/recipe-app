@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useParams} from 'react-router-dom'
 import style from "./style.module.css";
 
 import TextField from "@material-ui/core/TextField";
@@ -50,8 +51,30 @@ let schema = yup.object().shape({
     .min(1),
 });
 
+export default function RecipeEdit() {
 
-export default function RecipeForm() {
+  let { id } = useParams();
+
+  useEffect( async () => {
+    console.log('recipeId', id)
+
+    const response = await recipeApi.get(`/recipe/${id}` )
+
+    const body = response.data
+
+    const { recipie } = body
+    
+  
+    setTitle(recipie.title)
+    setIngredients(recipie.ingredients)
+    setGuide(recipie.guide)
+    setAmount(recipie.amount)
+    setMeasure(recipie.measure)
+
+  }, [id])
+
+
+  
   const [title, setTitle] = useState("");
   const [currentIngredient, setCurrentIngredient] = useState("");
   const [ingredients, setIngredients] = useState([]);
@@ -83,15 +106,9 @@ export default function RecipeForm() {
     const newList = [...recipies];
     newList.push(newRecipie);
     setRecipies(newList);
-    setTitle("");
-    setIngredients([]);
-    setGuide("");
-    setErrorMessage("");
 
-    const response = await recipeApi.post("/recipe", newRecipie)
-
+    const response = await recipeApi.put(`/recipe/${id}`, newRecipie);
   };
-  
 
   const onDelete = (index) => {
     const newList = [...recipies];
@@ -104,9 +121,6 @@ export default function RecipeForm() {
     const newList = [...ingredients];
     newList.push(newIngredient);
     setIngredients(newList);
-
-    setCurrentIngredient("");
-    setAmount("");
   };
 
   return (
@@ -194,44 +208,7 @@ export default function RecipeForm() {
       >
         {errorMessage}
       </div>
-
-      <div className={style.list}>
       
-        <ul>
-          {recipies.map((recipe, i) => {
-            return (
-              
-              <div key={i} style={{ marginTop: "1rem" }}>
-              <h2>Preview</h2>
-                <li>
-                  <h4> Title:</h4> {recipe.title}
-                  <h4>ingredients:</h4>
-                  {recipe.ingredients.map((ingredient, i) => {
-                    return (
-                      <div key={i}>
-                        <p>
-                          {ingredient.amount} {ingredient.measure}{" "}
-                          {ingredient.name}
-                        </p>
-                      </div>
-                    );
-                  })}
-                  <h4>guide:</h4>
-                  {recipe.guide}
-                </li>
-                <br />
-                <button
-                  type="button"
-                  onClick={onDelete}
-                  style={{ margin: "20px" }}
-                >
-                  Löschen
-                </button>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
     </div>
   );
 }

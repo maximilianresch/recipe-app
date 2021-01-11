@@ -1,5 +1,7 @@
 import "./App.css";
 import RecipeForm from "./pages/RecipeForm";
+import RecipeList from './pages/RecipeList';
+import RecipeEdit from './pages/RecipeEdit';
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -24,6 +26,8 @@ export default function App(props) {
     });
   }, [setUser]);
 
+
+
   return (
     <Router>
       <div>
@@ -33,7 +37,10 @@ export default function App(props) {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/recipe">Recipe</Link>
+              <Link to="/recipe">Recipe Editor</Link>
+            </li>
+            <li>
+              <Link to="/recipes">Recipes</Link>
             </li>
             <li>
               {user ? (
@@ -45,6 +52,7 @@ export default function App(props) {
             <li>
               {user ? (
                 <Link
+                  to="/"
                   onClick={(e) => {
                     deleteUserToken();
                     setUser(undefined);
@@ -65,6 +73,14 @@ export default function App(props) {
           <Route path="/recipe">
             <RecipeForm />
             <Footer />
+          </Route>
+
+          <Route path="/recipes/:id/edit">
+            <RecipeEdit />
+          </Route>
+          
+          <Route path="/recipes">
+            <RecipeList />
           </Route>
           <Route path="/register">
             <Register />
