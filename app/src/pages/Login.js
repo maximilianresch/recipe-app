@@ -5,8 +5,9 @@ import style from "./style.module.css";
 import axios from "axios";
 import * as auth from "../utils/auth";
 
-import TextField from "@material-ui/core/TextField";
 import * as yup from "yup";
+
+import { Input, InputGroup, Button, InputRightElement } from "@chakra-ui/react";
 
 let schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -17,6 +18,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
 
   const router = useHistory();
 
@@ -53,8 +56,6 @@ export default function Login() {
   const handleKeypress = (e) => {
     if (e.which === 13) {
       onSubmit();
-
-      
     }
   };
 
@@ -62,27 +63,41 @@ export default function Login() {
     <div>
       <form className={style.form}>
         <h1>Login</h1>
-        <TextField
-          variant="outlined"
-          label="email"
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          onKeyPress={handleKeypress}
-        ></TextField>
-        <TextField
-          variant="outlined"
-          label="password"
-          type="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          onKeyPress={handleKeypress}
-        ></TextField>
+        <div>
+          <Input
+            variant="filled"
+            placeholder="email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            onKeyPress={handleKeypress}
+          ></Input>
+        </div>
+        <div>
+          <InputGroup>
+            <Input
+              variant="filled"
+              placeholder="password"
+              type={show ? "text" : "password"}
+              onKeyPress={handleKeypress}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            ></Input>
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick} >
+                {show ? "Hide" : "Show"}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </div>
         <div style={{ color: "red" }}>{errorMessage}</div>
-        <button type="button" onClick={onSubmit}>
-          Login
-        </button>
+
+       
+          <Button colorScheme="blue" variant="outline" onClick={onSubmit}>
+            change
+          </Button>
+      
       </form>
     </div>
   );

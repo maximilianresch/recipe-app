@@ -3,9 +3,11 @@ import recipeApi from "../utils/recipeApi";
 import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
 
-import TextField from "@material-ui/core/TextField";
 import { Box } from "@material-ui/core";
 import { userState } from "../globalState";
+import { Input } from '@chakra-ui/react';
+import style from './style.module.css';
+import {Button} from '@chakra-ui/react'
 
 export default function Profile({ user }) {
   const setUser = useSetRecoilState(userState);
@@ -25,21 +27,19 @@ export default function Profile({ user }) {
   };
 
   return (
-    <div>
-      <div>
+      <div className={style.form}>
         <h1>Profile</h1>
-        <div>
           {user && (
-            <form action="/profile">
+            <form  action="/profile">
               <Box
                 display="flex"
-                flexDirection="row"
+                flexDirection="column"
                 gridGap="5px"
                 justifyContent="center"
               >
-                <TextField
+                <Input
                   id="filled-basic"
-                  label="firstname"
+                  placeholder="firstname"
                   variant="filled"
                   value={firstname}
                   onChange={(e) => {
@@ -47,18 +47,18 @@ export default function Profile({ user }) {
                   }}
                 />
 
-                <TextField
+                <Input
                   id="filled-basic"
-                  label="lastname"
+                  placeholder="lastname"
                   variant="filled"
                   value={lastname}
                   onChange={(e) => {
                     setNewLastname(e.target.value);
                   }}
                 />
-                <TextField
+                <Input
                   id="filled-basic"
-                  label="email"
+                  placeholder="email"
                   variant="filled"
                   value={email}
                   onChange={(e) => {
@@ -66,13 +66,13 @@ export default function Profile({ user }) {
                   }}
                 />
               </Box>
-              <button type="button" onClick={onButton}>
+              <div style={{paddingTop: "20px", width:"50%", margin:"auto"}}>
+              <Button colorScheme="blue" variant="outline" onClick={onButton}>
                 change
-              </button>
+              </Button>
+              </div>
             </form>
           )}
-        </div>
       </div>
-    </div>
   );
 }

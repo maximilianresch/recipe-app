@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import {useParams} from 'react-router-dom'
 import style from "./style.module.css";
 
-import TextField from "@material-ui/core/TextField";
 import * as yup from "yup";
 
-import { Select, MenuItem, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
 import recipeApi from "../utils/recipeApi";
+
+import { Input, Textarea, Select, Button, Stack } from '@chakra-ui/react';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -127,60 +126,59 @@ export default function RecipeEdit() {
     <div>
       <form className={style.form}>
         <h1>Recipe</h1>
-        <TextField
-          variant="outlined"
+        <div>
+        <Input
+          variant="filled"
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
           }}
-          label="title"
-        ></TextField>
-        <TextField
+          placeholder="title"
+        ></Input>
+        </div>
+        <div>
+        <Textarea
           multiline
           rows={10}
-          variant="outlined"
+          variant="filled"
           value={guide}
-          label="guide"
+          placeholder="guide"
           onChange={(e) => {
             setGuide(e.target.value);
           }}
-        ></TextField>
-        <TextField
-          variant="outlined"
+        ></Textarea>
+        </div>
+        <div>
+        <Input
+          variant="filled"
           value={currentIngredient}
-          label="ingredients"
+          placeholder="ingredients"
           onChange={(e) => {
             setCurrentIngredient(e.target.value);
           }}
-        ></TextField>
+        ></Input>
+        </div>
         <Box display="flex" flexDirection="row" gap="10px">
-          <TextField
-            variant="outlined"
+          <Input
+            variant="filled"
             value={amount}
-            label="amount"
+            placeholder="amount"
             onChange={(e) => {
               setAmount(e.target.value);
             }}
-          ></TextField>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">
-              measure
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              label="measure"
+          ></Input>
+          <Select
+            variant="filled"
+              placeholder="measure"
               onChange={(e) => {
                 setMeasure(e.target.value);
               }}
-              value={measure}
             >
-              <MenuItem value={""}>none</MenuItem>
-              <MenuItem value={"g"}>g</MenuItem>
-              <MenuItem value={"kg"}>kg</MenuItem>
-              <MenuItem value={"ml"}>ml</MenuItem>
+              <option value=""></option>
+              <option value={"g"}>g</option>
+              <option value={"kg"}>kg</option>
+              <option value={"ml"}>ml</option>
             </Select>
-          </FormControl>
         </Box>
         {ingredients.map((ingredient, i) => {
           return (
@@ -190,13 +188,14 @@ export default function RecipeEdit() {
             </p>
           );
         })}
-
-        <button type="button" onClick={onAdd}>
-          add ingredients and amount
-        </button>
-        <button type="button" onClick={onSubmit}>
-          Submit
-        </button>
+        <Stack direction="column" spacing={4}>
+          <Button variant="outline" onClick={onAdd} colorScheme="green">
+            Add ingredients and amount
+          </Button>
+          <Button variant="outline" onClick={onSubmit} colorScheme="green">
+            Submit
+          </Button>
+        </Stack>
       </form>
       <div
         style={{

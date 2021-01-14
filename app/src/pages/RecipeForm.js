@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import style from "./style.module.css";
 
-import TextField from "@material-ui/core/TextField";
 import * as yup from "yup";
 
-import { Select, MenuItem, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
 import recipeApi from "../utils/recipeApi";
+
+import {
+  Input,
+  Textarea,
+  Select,
+  Button,
+  ButtonGroup,
+  Stack,
+} from "@chakra-ui/react";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -50,7 +56,6 @@ let schema = yup.object().shape({
     .min(1),
 });
 
-
 export default function RecipeForm() {
   const [title, setTitle] = useState("");
   const [currentIngredient, setCurrentIngredient] = useState("");
@@ -88,15 +93,7 @@ export default function RecipeForm() {
     setGuide("");
     setErrorMessage("");
 
-    const response = await recipeApi.post("/recipe", newRecipie)
-
-  };
-  
-
-  const onDelete = (index) => {
-    const newList = [...recipies];
-    newList.splice(index, 1);
-    setRecipies(newList);
+    const response = await recipeApi.post("/recipe", newRecipie);
   };
 
   const onAdd = async () => {
@@ -113,60 +110,61 @@ export default function RecipeForm() {
     <div>
       <form className={style.form}>
         <h1>Recipe</h1>
-        <TextField
-          variant="outlined"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-          label="title"
-        ></TextField>
-        <TextField
-          multiline
-          rows={10}
-          variant="outlined"
-          value={guide}
-          label="guide"
-          onChange={(e) => {
-            setGuide(e.target.value);
-          }}
-        ></TextField>
-        <TextField
-          variant="outlined"
-          value={currentIngredient}
-          label="ingredients"
-          onChange={(e) => {
-            setCurrentIngredient(e.target.value);
-          }}
-        ></TextField>
+        <div>
+          <Input
+            variant="filled"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            placeholder="title"
+          ></Input>
+        </div>
+        <div>
+          <Textarea
+            multiline
+            rows={10}
+            variant="filled"
+            value={guide}
+            placeholder="guide"
+            onChange={(e) => {
+              setGuide(e.target.value);
+            }}
+          ></Textarea>
+        </div>
+        <div>
+          <Input
+            variant="filled"
+            value={currentIngredient}
+            placeholder="ingredients"
+            onChange={(e) => {
+              setCurrentIngredient(e.target.value);
+            }}
+          ></Input>
+        </div>
         <Box display="flex" flexDirection="row" gap="10px">
-          <TextField
-            variant="outlined"
+          <Input
+            variant="filled"
             value={amount}
-            label="amount"
+            placeholder="amount"
             onChange={(e) => {
               setAmount(e.target.value);
             }}
-          ></TextField>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">
-              measure
-            </InputLabel>
+          ></Input>
+          <Box style={{ paddingLeft: "4px", width: "100%" }}>
             <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              label="measure"
+              variant="filled"
+              placeholder="measure"
               onChange={(e) => {
                 setMeasure(e.target.value);
               }}
-              value={measure}
             >
-              <MenuItem value={""}>none</MenuItem>
-              <MenuItem value={"g"}>g</MenuItem>
-              <MenuItem value={"kg"}>kg</MenuItem>
-              <MenuItem value={"ml"}>ml</MenuItem>
+              <option value=""></option>
+              <option value={"g"}>g</option>
+              <option value={"kg"}>kg</option>
+              <option value={"ml"}>ml</option>
             </Select>
-          </FormControl>
+          </Box>
         </Box>
         {ingredients.map((ingredient, i) => {
           return (
@@ -176,13 +174,14 @@ export default function RecipeForm() {
             </p>
           );
         })}
-
-        <button type="button" onClick={onAdd}>
-          add ingredients and amount
-        </button>
-        <button type="button" onClick={onSubmit}>
-          Submit
-        </button>
+        <Stack direction="column" spacing={4}>
+          <Button variant="outline" onClick={onAdd} colorScheme="green">
+            Add ingredients and amount
+          </Button>
+          <Button variant="outline" onClick={onSubmit} colorScheme="green">
+            Submit
+          </Button>
+        </Stack>
       </form>
       <div
         style={{
@@ -196,13 +195,11 @@ export default function RecipeForm() {
       </div>
 
       <div className={style.list}>
-      
         <ul>
           {recipies.map((recipe, i) => {
             return (
-              
               <div key={i} style={{ marginTop: "1rem" }}>
-              <h2>Preview</h2>
+                <h2>Preview</h2>
                 <li>
                   <h4> Title:</h4> {recipe.title}
                   <h4>ingredients:</h4>
@@ -220,13 +217,6 @@ export default function RecipeForm() {
                   {recipe.guide}
                 </li>
                 <br />
-                <button
-                  type="button"
-                  onClick={onDelete}
-                  style={{ margin: "20px" }}
-                >
-                  Löschen
-                </button>
               </div>
             );
           })}

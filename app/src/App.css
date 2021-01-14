@@ -20,3 +20,8 @@
 .nav a:hover {
   color: black;
 }
+
+.menu {
+    background: rosybrown;
+    padding: 10px;
+}
