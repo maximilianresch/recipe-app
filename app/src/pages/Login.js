@@ -7,7 +7,8 @@ import * as auth from "../utils/auth";
 
 import * as yup from "yup";
 
-import { Input, InputGroup, Button, InputRightElement } from "@chakra-ui/react";
+import { Input, InputGroup, Button, InputRightElement, Text, Link } from "@chakra-ui/react";
+import Register from './Register';
 
 let schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -95,9 +96,16 @@ export default function Login() {
 
        
           <Button colorScheme="blue" variant="outline" onClick={onSubmit}>
-            change
+            login
           </Button>
-      
+          <div>
+        <Text style={{paddingTop: "50px"}}>Don't have an Account ?</Text>
+        <Text align="center">
+          <Link href="/register" color="#327AD1">
+            Register
+          </Link>
+        </Text>
+        </div>
       </form>
     </div>
   );

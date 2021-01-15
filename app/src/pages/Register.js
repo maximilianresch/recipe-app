@@ -8,7 +8,14 @@ import * as yup from "yup";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Box } from "@material-ui/core";
-import { Input, InputGroup, Button, InputRightElement } from "@chakra-ui/react";
+import {
+  Input,
+  InputGroup,
+  Button,
+  InputRightElement,
+  Text,
+  Link,
+} from "@chakra-ui/react";
 
 let schema = yup.object().shape({
   firstname: yup.string().required(),
@@ -135,8 +142,16 @@ export default function Register() {
         </div>
         <div style={{ color: "red" }}>{errorMessage}</div>
         <Button colorScheme="blue" variant="outline" onClick={onSubmit}>
-          change
-        </Button>
+          register
+        </Button> 
+        <div>
+        <Text style={{paddingTop: "50px"}}>Already using Recipe ?</Text>
+        <Text align="center">
+          <Link href="/login" color="#327AD1">
+            Sign in
+          </Link>
+        </Text>
+        </div>
       </form>
     </div>
   );

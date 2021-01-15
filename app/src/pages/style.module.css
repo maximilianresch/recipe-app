@@ -28,7 +28,6 @@
   text-align: center;
 }
 
-
 .recipeList {
   padding: 30px 10px;
 
@@ -36,8 +35,7 @@
   margin: auto;
 }
 
-
-.recipeList h1 {
+.recipeList h2 {
   font-size: 40px;
 }
 
@@ -49,18 +47,46 @@
   margin-bottom: 1px;
 }
 
-
-.recipeList h2 {
+.recipeList h3 {
   margin-top: 20px;
   font-size: 20px;
   font-weight: bold;
 }
 
-
 /* Home */
 
-.arrow {
-  height: 30%;
-  width: 30%;
-  padding: 0 0 0 50px;
+.homeHeading {
+  position: relative;
+  color: #16355a;
+  font-size: calc(1em + 20vw);
+  font-weight: 900;
+  text-shadow: 0 4px 0 #e0e0e0, 0 5px 0 rgb(219, 219, 219),
+    0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2),
+    0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2),
+    0 20px 20px rgba(0, 0, 0, 0.15);
+}
+
+.bg {
+  background-image: url("../assets/BlueHome.jpg");
+  background-size: cover;
+
+  position: relative;
+  height: 90vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.bg::before {
+  content: "";
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(38, 92, 158, 0.55);
 }

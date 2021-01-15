@@ -78,7 +78,7 @@ export default function App(props) {
               {({ isOpen }) => (
                 <>
                   <MenuButton
-                    style={{ color: "white", backgroundColor: "brown" }}
+                    style={{ color: "white", backgroundColor: "#265C9E" }}
                     isActive={isOpen}
                     as={Button}
                   >

@@ -16,16 +16,6 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    minWidth: 120,
-    marginLeft: 10,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 /*
   const recipe = [
           {
@@ -64,8 +54,6 @@ export default function RecipeForm() {
   const [amount, setAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [measure, setMeasure] = useState("");
-
-  const classes = useStyles();
 
   const [recipies, setRecipies] = useState([]);
 
@@ -175,10 +163,22 @@ export default function RecipeForm() {
           );
         })}
         <Stack direction="column" spacing={4}>
-          <Button variant="outline" onClick={onAdd} colorScheme="green">
+          <Button
+            variant="outline"
+            onClick={onAdd}
+            color="#265C9E"
+            borderColor="#265C9E"
+            border="solid 2px #265C9E"
+          >
             Add ingredients and amount
           </Button>
-          <Button variant="outline" onClick={onSubmit} colorScheme="green">
+          <Button
+            variant="outline"
+            onClick={onSubmit}
+            color="#265C9E"
+            borderColor="#265C9E"
+            border="solid 2px #265C9E"
+          >
             Submit
           </Button>
         </Stack>

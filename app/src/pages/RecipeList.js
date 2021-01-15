@@ -18,18 +18,36 @@ import {
 
 import { useRecoilState } from "recoil";
 import { userState } from "../globalState";
+import { useParams } from "react-router-dom";
 
 export default function RecipeList() {
   const [recipies, setRecipies] = useState([]);
   const [user, setUser] = useRecoilState(userState);
+
+  let { id } = useParams();
 
   useEffect(async () => {
     const response = await recipeApi.get(`/recipe`);
     setRecipies(response.data.recipes);
   }, []);
 
+  const onDelete = async (id) => {
+
+    
+    const response = await recipeApi.delete(`/recipe/${id}`);
+
+    const newRecipes = [...recipies]
+    const index = recipies.findIndex(r => r._id === id)
+    newRecipes.splice(index, 1)
+    setRecipies(newRecipes)
+    console.log("id", id);
+  };
+
   return (
     <div>
+      <div style={{ textAlign: "center", paddingTop: "50px" }}>
+        <h1>Recipes</h1>
+      </div>
       <>
         {!user && (
           <Text
@@ -53,11 +71,12 @@ export default function RecipeList() {
           </Text>
         )}
       </>
+
       {recipies.map((recipe, i) => {
         return (
           <div className={style.recipeList}>
-            <h1>{recipe.title}</h1>
-            <Table key={i} variant="simple" bg="#D9896C" color="whitesmoke">
+            <h2>{recipe.title}</h2>
+            <Table key={i} variant="simple" bg="#5F96D9" color="whitesmoke">
               {recipe.ingredients.map((ingredient, i) => {
                 return (
                   <Tbody className={style.tbody} key={i}>
@@ -72,13 +91,21 @@ export default function RecipeList() {
               })}
             </Table>
             <div>
-              <h2>Guide: </h2>
+              <h3>Guide: </h3>
               <p>{recipe.guide}</p>
-              <ButtonGroup style={{paddingTop: "10px", paddingBottom: "10px"}} variant="outline" spacing="8">
+              <ButtonGroup
+                style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                variant="outline"
+                spacing="8"
+              >
                 <Button colorScheme="blue">
                   <Link href={`/recipes/${recipe._id}/edit`}>Edit</Link>
                 </Button>
-                <Button colorScheme="red">Delete</Button>
+                <Button
+              
+                  colorScheme="red"
+                  onClick={() => onDelete(recipe._id)}
+                >Delete</Button>
               </ButtonGroup>
 
               <br />

@@ -5,20 +5,9 @@ import style from "./style.module.css";
 import * as yup from "yup";
 
 import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import recipeApi from "../utils/recipeApi";
 
 import { Input, Textarea, Select, Button, Stack } from '@chakra-ui/react';
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    minWidth: 120,
-    marginLeft: 10,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
 
 /*
   const recipe = [
@@ -82,7 +71,6 @@ export default function RecipeEdit() {
   const [errorMessage, setErrorMessage] = useState("");
   const [measure, setMeasure] = useState("");
 
-  const classes = useStyles();
 
   const [recipies, setRecipies] = useState([]);
 

@@ -1,34 +1,27 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box, Button, Link } from "@chakra-ui/react";
+import {ArrowRightIcon} from '@chakra-ui/icons'
 import style from "./style.module.css";
 
-import oldRecipe from "../assets/oldRecipe.jpeg";
-import foodHome from "../assets/foodHome.jpg";
-import curveArrow from "../assets/curveArrow.svg";
+import { useRecoilState } from 'recoil';
+import { userState } from '../globalState';
 
 export default function Home() {
+  const [user, setUser] = useRecoilState(userState)
+
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-    >
-      <img
-        src={foodHome}
-        alt=""
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-      />
-      <Box pt="100px" fontSize="35px">
-        <p>Do you have old recipes which look like that ?</p>
-        <img src={oldRecipe} alt="" width={250} />
-        <img className={style.arrow} src={curveArrow} alt="" />
-      </Box>
+    <Box >
+      <div className={style.bg}>
+      
+        <div className={style.homeHeading}>RECIPE</div>
+        <div>
+        {!user && (
+        <Link href="/register">
+        <Button rightIcon={<ArrowRightIcon boxSize={3} />} variant="solid" colorScheme="blue" color="#F0F1F2">Get started</Button>
+      </Link>
+    )}
+    </div>
+      </div>
     </Box>
   );
 }
