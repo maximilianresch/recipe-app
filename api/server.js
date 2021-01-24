@@ -10,8 +10,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const JWT_KEY = "app-key";
-
 app.post("/register", async (req, res) => {
   const body = req.body;
   console.log("body", req.body);
@@ -81,7 +79,6 @@ app.post("/recipe", async (req, res) => {
   console.log("user", user);
 });
 
-
 app.get("/recipe/:id", async (req, res) => {
   const recipeId = req.params.id;
 
@@ -91,10 +88,8 @@ app.get("/recipe/:id", async (req, res) => {
 
   if (!recipie) throw new Error(403);
 
-
   res.json({ recipie });
-})
-
+});
 
 app.get("/recipe", async (req, res) => {
   const body = req.body;
@@ -114,7 +109,7 @@ app.get("/me", async (req, res) => {
   res.json({ success: true, user });
 });
 
-app.put("/me", async (req, res) => {
+app.put("/profile", async (req, res) => {
   const user = await getAuthUser(req, res);
   const body = req.body;
 
@@ -148,18 +143,38 @@ app.put("/recipe/:id", async (req, res) => {
   res.json({});
 });
 
+app.delete("/recipe/:id", async (req, res) => {
+  const recipeId = req.params.id;
 
+  const user = await getAuthUser(req, res);
+
+  const recipie = await db.Recipe.findOne({ _id: recipeId, userId: user.id });
+
+  const deleteRecipe = await db.Recipe.deleteOne({ _id: recipeId }, req.body);
+
+  res.json({});
+});
 
 app.listen(4000, () => {
   console.log("Listening on port 4000");
 });
 
+const JWT_KEY = "app-key";
+
 async function getAuthUser(req) {
   const token = req.headers.authorization;
   console.log("token", token);
 
-  const jwtPayload = jwt.verify(token, JWT_KEY);
-  const userId = jwtPayload.id;
+  if (!token) {
+    throw new Error("token not found");
+  }
+
+  try {
+    const jwtPayload = jwt.verify(token, JWT_KEY);
+    const userId = jwtPayload.id;
+  } catch (e) {
+    throw new Error("token not found");
+  }
 
   const user = await db.User.findById(userId);
 
