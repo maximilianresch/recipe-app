@@ -12,10 +12,12 @@ import {
   Input,
   InputGroup,
   Button,
-  InputRightElement,
+  InputLeftElement,
   Text,
   Link,
+  useToast,
 } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 let schema = yup.object().shape({
   firstname: yup.string().required(),
@@ -30,6 +32,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const toast = useToast();
 
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -70,8 +73,22 @@ export default function Register() {
     if (response.data.success) {
       auth.getUserToken(response.data.token);
       router.push("/me");
+      return toast({
+        title: "Account created.",
+        description: "Account successfully created!",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
     } else {
       setErrorMessage("E-mail is already in use");
+      return toast({
+        title: "An error occurred.",
+        description: "Unable to create user account!",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
 
     console.log("response", response);
@@ -133,24 +150,24 @@ export default function Register() {
                 setPassword(e.target.value);
               }}
             ></Input>
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? "Hide" : "Show"}
+            <InputLeftElement>
+              <Button size="sm" onClick={handleClick}>
+                {show ? <ViewIcon /> : <ViewOffIcon />}
               </Button>
-            </InputRightElement>
+            </InputLeftElement>
           </InputGroup>
         </div>
         <div style={{ color: "red" }}>{errorMessage}</div>
         <Button colorScheme="blue" variant="outline" onClick={onSubmit}>
           register
-        </Button> 
+        </Button>
         <div>
-        <Text style={{paddingTop: "50px"}}>Already using Recipe ?</Text>
-        <Text align="center">
-          <Link href="/login" color="#327AD1">
-            Sign in
-          </Link>
-        </Text>
+          <Text style={{ paddingTop: "50px" }}>Already using Recipe ?</Text>
+          <Text align="center">
+            <Link href="/login" color="#327AD1">
+              Sign in
+            </Link>
+          </Text>
         </div>
       </form>
     </div>

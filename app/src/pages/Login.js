@@ -7,8 +7,18 @@ import * as auth from "../utils/auth";
 
 import * as yup from "yup";
 
-import { Input, InputGroup, Button, InputRightElement, Text, Link } from "@chakra-ui/react";
-import Register from './Register';
+import {
+  Input,
+  InputGroup,
+  Button,
+  InputLeftElement,
+  Text,
+  Link,
+  useToast,
+} from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+
+import Register from "./Register";
 
 let schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -20,6 +30,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [show, setShow] = useState(false);
+  const toast = useToast();
   const handleClick = () => setShow(!show);
 
   const router = useHistory();
@@ -33,7 +44,13 @@ export default function Login() {
     });
 
     if (!valid) {
-      return;
+      return toast({
+        title: "An error occurred.",
+        description: "Unable to create user account!",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
 
     setErrorMessage("");
@@ -85,26 +102,25 @@ export default function Login() {
                 setPassword(e.target.value);
               }}
             ></Input>
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick} >
-                {show ? "Hide" : "Show"}
+            <InputLeftElement>
+              <Button size="sm" onClick={handleClick}>
+                {show ? <ViewIcon /> : <ViewOffIcon />}
               </Button>
-            </InputRightElement>
+            </InputLeftElement>
           </InputGroup>
         </div>
         <div style={{ color: "red" }}>{errorMessage}</div>
 
-       
-          <Button colorScheme="blue" variant="outline" onClick={onSubmit}>
-            login
-          </Button>
-          <div>
-        <Text style={{paddingTop: "50px"}}>Don't have an Account ?</Text>
-        <Text align="center">
-          <Link href="/register" color="#327AD1">
-            Register
-          </Link>
-        </Text>
+        <Button colorScheme="blue" variant="outline" onClick={onSubmit}>
+          login
+        </Button>
+        <div>
+          <Text style={{ paddingTop: "50px" }}>Don't have an Account ?</Text>
+          <Text align="center">
+            <Link href="/register" color="#327AD1">
+              Register
+            </Link>
+          </Text>
         </div>
       </form>
     </div>

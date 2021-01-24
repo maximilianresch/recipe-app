@@ -5,8 +5,14 @@
   background-color: #16355A;
 
   padding: 25px;
+  
+}
 
-
+.nav {
+  position: -webkit-sticky;
+	position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .nav a {
@@ -20,4 +26,8 @@
 .menu {
     background: #16355A;
     padding: 15px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  z-index: 1;
 }

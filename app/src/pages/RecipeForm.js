@@ -3,8 +3,6 @@ import style from "./style.module.css";
 
 import * as yup from "yup";
 
-import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import recipeApi from "../utils/recipeApi";
 
 import {
@@ -12,8 +10,24 @@ import {
   Textarea,
   Select,
   Button,
-  ButtonGroup,
   Stack,
+  Box,
+  Table,
+  Tbody,
+  Tr,
+  Td,
+  Link
+} from "@chakra-ui/react";
+
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 /*
@@ -55,7 +69,12 @@ export default function RecipeForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [measure, setMeasure] = useState("");
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
+
   const [recipies, setRecipies] = useState([]);
+
+  
 
   const onSubmit = async () => {
     const newRecipie = { title, ingredients, guide };
@@ -82,6 +101,7 @@ export default function RecipeForm() {
     setErrorMessage("");
 
     const response = await recipeApi.post("/recipe", newRecipie);
+    onOpen();
   };
 
   const onAdd = async () => {
@@ -96,6 +116,26 @@ export default function RecipeForm() {
 
   return (
     <div>
+    <>
+        {" "}
+        <AlertDialog
+        motionPreset="slideInBottom"
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+      >
+        <AlertDialogOverlay />
+
+        <AlertDialogContent>
+          <AlertDialogHeader>YUHUU!</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            Your recipe has been successfully added. You can view it in <Link color="teal.500" href="/recipes">Recipes</Link>
+          </AlertDialogBody>
+        </AlertDialogContent>
+      </AlertDialog>
+      </>
       <form className={style.form}>
         <h1>Recipe</h1>
         <div>
@@ -151,6 +191,8 @@ export default function RecipeForm() {
               <option value={"g"}>g</option>
               <option value={"kg"}>kg</option>
               <option value={"ml"}>ml</option>
+              <option value={"l"}>l</option>
+              <option value={"Stk"}>Stk</option>
             </Select>
           </Box>
         </Box>
@@ -172,9 +214,10 @@ export default function RecipeForm() {
           >
             Add ingredients and amount
           </Button>
+
           <Button
             variant="outline"
-            onClick={onSubmit}
+            onClick={() => {onSubmit(); }}
             color="#265C9E"
             borderColor="#265C9E"
             border="solid 2px #265C9E"
@@ -193,35 +236,33 @@ export default function RecipeForm() {
       >
         {errorMessage}
       </div>
-
-      <div className={style.list}>
-        <ul>
-          {recipies.map((recipe, i) => {
-            return (
-              <div key={i} style={{ marginTop: "1rem" }}>
-                <h2>Preview</h2>
-                <li>
-                  <h4> Title:</h4> {recipe.title}
-                  <h4>ingredients:</h4>
-                  {recipe.ingredients.map((ingredient, i) => {
-                    return (
-                      <div key={i}>
-                        <p>
+      <>
+        {recipies.map((recipe, i) => {
+          return (
+            <div className={style.recipeList}>
+              <h2>{recipe.title}</h2>
+              <Table key={i} variant="simple" bg="#5F96D9" color="whitesmoke">
+                {recipe.ingredients.map((ingredient, i) => {
+                  return (
+                    <Tbody className={style.tbody} key={i}>
+                      <Tr className={style.tr}>
+                        <Td>
                           {ingredient.amount} {ingredient.measure}{" "}
                           {ingredient.name}
-                        </p>
-                      </div>
-                    );
-                  })}
-                  <h4>guide:</h4>
-                  {recipe.guide}
-                </li>
-                <br />
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  );
+                })}
+              </Table>
+              <div>
+                <h3>Guide: </h3>
+                <p>{recipe.guide}</p>
               </div>
-            );
-          })}
-        </ul>
-      </div>
+            </div>
+          );
+        })}
+      </>
     </div>
   );
 }
