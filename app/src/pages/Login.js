@@ -45,8 +45,8 @@ export default function Login() {
 
     if (!valid) {
       return toast({
-        title: "An error occurred.",
-        description: "Unable to create user account!",
+        title: "Something went wrong.",
+        description: "Unable to login!",
         status: "error",
         duration: 9000,
         isClosable: true,

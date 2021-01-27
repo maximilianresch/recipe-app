@@ -175,7 +175,8 @@ async function getAuthUser(req) {
   } catch (e) {
     throw new Error("token not found");
   }
-
+  const jwtPayload = jwt.verify(token, JWT_KEY);
+  const userId = jwtPayload.id;
   const user = await db.User.findById(userId);
 
   console.log("user", user);

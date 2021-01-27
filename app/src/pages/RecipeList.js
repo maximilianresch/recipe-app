@@ -32,7 +32,8 @@ const fetcher = (url) => recipeApi.get(url).then((res) => res.data);
 export default function RecipeList() {
   const [user, setUser] = useRecoilState(userState);
   const [recipies, setRecipies] = useState([]);
-
+  const [searchfield, setSearchfield] = useState(""); 
+  
   const { data, error } = useSWR("/recipe", fetcher);
 
   let { id } = useParams();
@@ -42,6 +43,14 @@ export default function RecipeList() {
     setRecipies(response.data.recipes);
   }, []);
 
+  const onSearch = (e) => {
+    setSearchfield(e.target.value)
+    const filteredRecipes = [...recipies];
+    const filteredNewRecipes = filteredRecipes.filter(recipe => {
+      return recipe.title.toLowerCase().includes(searchfield.toLowerCase())
+    })
+    setRecipies(filteredNewRecipes);
+  }
   
 
   const onDelete = async (id) => {
@@ -54,7 +63,7 @@ export default function RecipeList() {
     console.log("id", id);
   };
 
-  if (error) return <div>failed to load</div>;
+  if (error) return <Text textAlign="center">You may need to login or register</Text>;
   if (!data)
     return (
       <div
@@ -73,12 +82,10 @@ export default function RecipeList() {
       <Box>
         <InputGroup>
           <Input
-            type="text"
+            type="search"
             placeholder="Search"
+            onChange={onSearch}
           />
-          <InputRightElement>
-            <Button as={Search2Icon} size="sm" />
-          </InputRightElement>
         </InputGroup>
       </Box>
       <div style={{ textAlign: "center", paddingTop: "50px" }}>
@@ -175,6 +182,7 @@ export default function RecipeList() {
           </div>
         );
       })}
+      
     </div>
   );
 }
