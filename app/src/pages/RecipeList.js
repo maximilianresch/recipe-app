@@ -33,6 +33,7 @@ export default function RecipeList() {
   const [user, setUser] = useRecoilState(userState);
   const [recipies, setRecipies] = useState([]);
   const [searchfield, setSearchfield] = useState(""); 
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
   
   const { data, error } = useSWR("/recipe", fetcher);
 
@@ -43,14 +44,12 @@ export default function RecipeList() {
     setRecipies(response.data.recipes);
   }, []);
 
-  const onSearch = (e) => {
-    setSearchfield(e.target.value)
-    const filteredRecipes = [...recipies];
-    const filteredNewRecipes = filteredRecipes.filter(recipe => {
+
+  
+ 
+    const filterRecipes = recipies.filter(recipe => {
       return recipe.title.toLowerCase().includes(searchfield.toLowerCase())
     })
-    setRecipies(filteredNewRecipes);
-  }
   
 
   const onDelete = async (id) => {
@@ -82,9 +81,10 @@ export default function RecipeList() {
       <Box>
         <InputGroup>
           <Input
+          value={searchfield}
             type="search"
             placeholder="Search"
-            onChange={onSearch}
+            onChange={e => setSearchfield(e.target.value)}
           />
         </InputGroup>
       </Box>
@@ -142,7 +142,7 @@ export default function RecipeList() {
           </Text>
         )}*/}
       </>
-      {recipies.map((recipe, i) => {
+      {filterRecipes.map((recipe, i) => {
         return (
           <div className={style.recipeList}>
             <h2>{recipe.title}</h2>
