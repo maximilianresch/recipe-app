@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import style from "./style.module.css";
 
+import { useRecoilState } from "recoil";
+import { userState } from "../globalState";
 import * as yup from "yup";
 
 import recipeApi from "../utils/recipeApi";
@@ -16,7 +18,7 @@ import {
   Tbody,
   Tr,
   Td,
-  Link
+  Link,
 } from "@chakra-ui/react";
 
 import {
@@ -34,7 +36,7 @@ import {
   const recipe = [
           {
             title: "Gulasch",
-            guide: "geh vorher scheißn (nicht hände waschen!!!)",
+            guide: "geh vorher aufs klo (nicht hände waschen!!!)",
             portions: "2"
             ingridients: [
               {
@@ -74,7 +76,7 @@ export default function RecipeForm() {
 
   const [recipies, setRecipies] = useState([]);
 
-  
+  const [user] = useRecoilState(userState);
 
   const onSubmit = async () => {
     const newRecipie = { title, ingredients, guide };
@@ -106,6 +108,7 @@ export default function RecipeForm() {
 
   const onAdd = async () => {
     const newIngredient = { name: currentIngredient, amount, measure };
+
     const newList = [...ingredients];
     newList.push(newIngredient);
     setIngredients(newList);
@@ -116,25 +119,34 @@ export default function RecipeForm() {
 
   return (
     <div>
-    <>
+      {!user && (
+        <Box p="30px" textAlign="center">
+          There is no user logged in or registered. But you can still use the
+          recipe editor. Keep in mind, that your recipes won't be safed.
+        </Box>
+      )}
+      <>
         {" "}
         <AlertDialog
-        motionPreset="slideInBottom"
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-      >
-        <AlertDialogOverlay />
+          motionPreset="slideInBottom"
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+          isOpen={isOpen}
+          isCentered
+        >
+          <AlertDialogOverlay />
 
-        <AlertDialogContent>
-          <AlertDialogHeader>YUHUU!</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Your recipe has been successfully added. You can view it in <Link color="teal.500" href="/recipes">Recipes</Link>
-          </AlertDialogBody>
-        </AlertDialogContent>
-      </AlertDialog>
+          <AlertDialogContent>
+            <AlertDialogHeader>YUHUU!</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Your recipe has been successfully added. You can view it in{" "}
+              <Link color="teal.500" href="/recipes">
+                Recipes
+              </Link>
+            </AlertDialogBody>
+          </AlertDialogContent>
+        </AlertDialog>
       </>
       <form className={style.form}>
         <h1>Recipe</h1>
@@ -217,7 +229,9 @@ export default function RecipeForm() {
 
           <Button
             variant="outline"
-            onClick={() => {onSubmit(); }}
+            onClick={() => {
+              onSubmit();
+            }}
             color="#265C9E"
             borderColor="#265C9E"
             border="solid 2px #265C9E"

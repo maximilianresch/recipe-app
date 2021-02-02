@@ -75,6 +75,13 @@
   text-align: center;
 }
 
+.greeting {
+  color: white;
+  position: relative;
+  font-size: 30px;
+  padding-bottom: 40px;
+}
+
 .bg {
   background-image: url("../assets/BlueHome.jpg");
   background-size: cover;
@@ -98,3 +105,9 @@
   left: 0px;
   background-color: rgba(38, 92, 158, 0.4);
 }
+
+@media (min-width: 1024px) {
+  .greeting {
+    font-size: 60px;
+  }
+} 

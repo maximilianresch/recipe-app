@@ -32,9 +32,8 @@ const fetcher = (url) => recipeApi.get(url).then((res) => res.data);
 export default function RecipeList() {
   const [user, setUser] = useRecoilState(userState);
   const [recipies, setRecipies] = useState([]);
-  const [searchfield, setSearchfield] = useState(""); 
-  const [filteredRecipes, setFilteredRecipes] = useState([]);
-  
+  const [searchfield, setSearchfield] = useState("");
+
   const { data, error } = useSWR("/recipe", fetcher);
 
   let { id } = useParams();
@@ -44,13 +43,9 @@ export default function RecipeList() {
     setRecipies(response.data.recipes);
   }, []);
 
-
-  
- 
-    const filterRecipes = recipies.filter(recipe => {
-      return recipe.title.toLowerCase().includes(searchfield.toLowerCase())
-    })
-  
+  const filterRecipes = recipies.filter((recipe) => {
+    return recipe.title.toLowerCase().includes(searchfield.toLowerCase());
+  });
 
   const onDelete = async (id) => {
     const response = await recipeApi.delete(`/recipe/${id}`);
@@ -62,7 +57,8 @@ export default function RecipeList() {
     console.log("id", id);
   };
 
-  if (error) return <Text textAlign="center">You may need to login or register</Text>;
+  if (error)
+    return <Text textAlign="center">You may need to login or register</Text>;
   if (!data)
     return (
       <div
@@ -78,15 +74,16 @@ export default function RecipeList() {
 
   return (
     <div>
-      <Box>
-        <InputGroup>
+      <Box pt="10px" d="flex" justifyContent="center">
+        <Box  w="50%">
           <Input
-          value={searchfield}
+         
+            value={searchfield}
             type="search"
             placeholder="Search"
-            onChange={e => setSearchfield(e.target.value)}
+            onChange={(e) => setSearchfield(e.target.value)}
           />
-        </InputGroup>
+        </Box>
       </Box>
       <div style={{ textAlign: "center", paddingTop: "50px" }}>
         <h1>Recipes</h1>
@@ -182,7 +179,6 @@ export default function RecipeList() {
           </div>
         );
       })}
-      
     </div>
   );
 }

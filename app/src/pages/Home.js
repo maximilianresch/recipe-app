@@ -12,7 +12,11 @@ export default function Home() {
   return (
     <Box>
       <div className={style.bg}>
-      <p className={style.para}>digitize your old recipes</p>
+      {user && (
+        <Box className={style.greeting}>
+        Hello {user.firstname}
+        </Box>
+      )}
         <div className={style.homeHeading}>RECIPE
         </div>
         
